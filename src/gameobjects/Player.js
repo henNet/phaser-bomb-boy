@@ -14,6 +14,13 @@ export class Player extends Physics.Arcade.Sprite {
 
     /* Inputs do teclado */
     this.cursors = scene.input.keyboard.createCursorKeys();
+
+    /* Inputs do Gamepad */
+    scene.input.gamepad.on("connected", this.gamepadConnected);
+  }
+
+  gamepadConnected(gamepad, event) {
+    console.log("Gamepad connected");
   }
 
   move() {
@@ -24,6 +31,30 @@ export class Player extends Physics.Arcade.Sprite {
     } else if (this.cursors.right.isDown) {
       this.sprite.setVelocityX(200);
       this.sprite.anims.play("right", true);
+
+      /* Verifica se ha algum gamepad */
+    } else if (this.scene.input.gamepad.total !== 0) {
+      const pad = this.scene.input.gamepad.getPad(0);
+
+      if (pad.A && this.sprite.body.touching.down) {
+        this.sprite.setVelocityY(-630);
+      }
+
+      if (pad.axes.length) {
+        const axisH = pad.axes[0].getValue();
+        const axisV = pad.axes[1].getValue();
+
+        if (axisH > 0.2) {
+          this.sprite.setVelocityX(200);
+          this.sprite.anims.play("right", true);
+        } else if (axisH < -0.2) {
+          this.sprite.setVelocityX(-200);
+          this.sprite.anims.play("left", true);
+        } else {
+          this.sprite.setVelocityX(0);
+          this.sprite.anims.play("turn");
+        }
+      }
     } else {
       this.sprite.setVelocityX(0);
       this.sprite.anims.play("turn");

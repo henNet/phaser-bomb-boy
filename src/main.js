@@ -12,6 +12,9 @@ const config = {
   height: 768,
   parent: "game-container",
   backgroundColor: "#028af8",
+  input: {
+    gamepad: true,
+  },
   physics: {
     default: "arcade",
     arcade: {
