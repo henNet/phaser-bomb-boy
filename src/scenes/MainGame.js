@@ -67,7 +67,9 @@ export class MainGame extends Scene {
     if (this.isGameOver === true) {
       this.physics.pause();
       //  Swap to the GameOver scene after a miliseconds delay
-      this.time.delayedCall(500, () => this.scene.start("GameOver"));
+      this.time.delayedCall(500, () =>
+        this.scene.start("GameOver", { score: this.score })
+      );
     }
   }
 }

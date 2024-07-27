@@ -55,5 +55,6 @@ export class Preloader extends Scene {
 
     /* Muda direto para outra tela  */
     this.scene.start("MainMenu");
+    // this.scene.start("GameOver");
   }
 }

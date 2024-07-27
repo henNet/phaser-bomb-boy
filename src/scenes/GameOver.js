@@ -1,9 +1,14 @@
 import { Scene } from "phaser";
-import { textStyle, textStyleBig } from "../utils/textStyle";
+import { textStyle, textStyleBig, textStyleMedium } from "../utils/textStyle";
 
 export class GameOver extends Scene {
   constructor() {
     super("GameOver");
+    this.score = 0;
+  }
+
+  init(data) {
+    this.score = data.score;
   }
 
   create() {
@@ -15,8 +20,23 @@ export class GameOver extends Scene {
       .setOrigin(0.5)
       .setDepth(100);
 
+    this.score = this.add
+      .text(
+        this.scale.width / 2,
+        this.scale.height / 2,
+        "Final Score: " + this.score,
+        textStyleMedium
+      )
+      .setOrigin(0.5)
+      .setDepth(100);
+
     this.add
-      .text(512, 490, "Click to Play Again", textStyle)
+      .text(
+        this.scale.width / 2,
+        this.scale.height * 0.7,
+        "Click to Play Again",
+        textStyle
+      )
       .setOrigin(0.5)
       .setDepth(100);
 

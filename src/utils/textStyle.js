@@ -7,6 +7,15 @@ var textStyle = {
   align: "center",
 };
 
+var textStyleMedium = {
+  fontFamily: "Arial Black",
+  fontSize: 50,
+  color: "#ffffff",
+  stroke: "#000000",
+  strokeThickness: 8,
+  align: "center",
+};
+
 var textStyleBig = {
   fontFamily: "Arial Black",
   fontSize: 80,
@@ -16,4 +25,4 @@ var textStyleBig = {
   align: "center",
 };
 
-export { textStyle, textStyleBig };
+export { textStyle, textStyleMedium, textStyleBig };
