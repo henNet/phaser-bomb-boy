@@ -1,5 +1,7 @@
 import { Scene } from "phaser";
 
+/* Classe responsável por carregar previamente os 
+assets do jogo */
 export class Preloader extends Scene {
   constructor() {
     super("Preloader");
@@ -20,6 +22,7 @@ export class Preloader extends Scene {
   }
 
   create() {
+    /* Animações do Player */
     this.anims.create({
       key: "left",
       frames: this.anims.generateFrameNumbers("player", { start: 0, end: 3 }),
@@ -40,13 +43,17 @@ export class Preloader extends Scene {
       repeat: -1,
     });
 
-    this.scene.transition({
-      target: "MainMenu",
-      duration: 1000,
-      moveBelow: true,
-      onUpdate: (progress) => {
-        this.cameras.main.setAlpha(1 - progress);
-      },
-    });
+    /* Transita de tela após um tempo (dutation) (Outra sugestão) */
+    // this.scene.transition({
+    //   target: "MainMenu",
+    //   duration: 1000,
+    //   moveBelow: true,
+    //   onUpdate: (progress) => {
+    //     this.cameras.main.setAlpha(1 - progress);
+    //   },
+    // });
+
+    /* Muda direto para outra tela  */
+    this.scene.start("MainMenu");
   }
 }
