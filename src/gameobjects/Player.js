@@ -1,4 +1,5 @@
 import { Physics } from "phaser";
+import { MobileVirtualInput } from "./MobileVirtualInput";
 
 /* Physics.Arcade.Sprite representa um componente de 
 corpo físico dinâmico ou estático. Sprite quer dizer que
@@ -11,24 +12,48 @@ export class Player extends Physics.Arcade.Sprite {
     this.sprite.setBounce(0.2);
     this.sprite.setCollideWorldBounds(true);
     this.sprite.body.setGravityY(600);
+    this.sprite.setScale(1.2).refreshBody();
 
     /* Inputs do teclado */
     this.cursors = scene.input.keyboard.createCursorKeys();
 
     /* Inputs do Gamepad */
-    scene.input.gamepad.on("connected", this.gamepadConnected);
+    scene.input.gamepad.on("connected", this.gamepadConnected, this);
+    scene.input.gamepad.on("disconnected", this.gamepadDisconnected, this);
+
+    /* Inputs do Gamepad Vitual para Mobile */
+    this.inputMobile = new MobileVirtualInput(scene);
+    this.inputMobile.button.on(
+      "pointerdown",
+      function () {
+        /* Realiza o jump do player quando se clica no botao virtual */
+        if (this.sprite.body.touching.down) this.sprite.setVelocityY(-730);
+      },
+      this
+    );
   }
 
   gamepadConnected(gamepad, event) {
     console.log("Gamepad connected");
+    this.inputMobile.joyStick.toggleVisible();
+    this.inputMobile.button.visible = false;
+  }
+
+  gamepadDisconnected(gamepad, event) {
+    console.log("Gamepad Disconnected");
+    this.inputMobile.joyStick.toggleVisible();
+    this.inputMobile.button.visible = true;
   }
 
   move() {
     /* Movimentação Direita e Esquerda */
-    if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown || this.inputMobile.cursors.left.isDown) {
       this.sprite.setVelocityX(-200);
       this.sprite.anims.play("left", true);
-    } else if (this.cursors.right.isDown) {
+    } else if (
+      this.cursors.right.isDown ||
+      this.inputMobile.cursors.right.isDown
+    ) {
       this.sprite.setVelocityX(200);
       this.sprite.anims.play("right", true);
 
