@@ -7,10 +7,16 @@ export class GameOver extends Scene {
     this.score = 0;
   }
 
+  /* This method is called by the Scene Manager 
+  when the scene starts, before preload() and create(). */
   init(data) {
     this.score = data.score;
   }
 
+  /* Use it to create your game objects. This method 
+  is called by the Scene Manager when the scene starts, 
+  after init() and preload(). Can be receive a data object 
+  passed via scene.start()  */
   create() {
     /* Scenario */
     this.add.image(512, 384, "background");
@@ -48,8 +54,27 @@ export class GameOver extends Scene {
       ease: "Bounce",
     });
 
+    /* Input Mouse */
     this.input.once("pointerdown", () => {
       this.scene.start("MainGame");
     });
+
+    /* Input Keyboard */
+    const enterKey = this.input.keyboard.addKey("ENTER");
+    enterKey.on("down", () => {
+      this.scene.start("MainGame");
+    });
+
+    /* Input Gamepad */
+    this.input.gamepad.once(
+      "down",
+      function (gamepad, button, value) {
+        // console.log(button.pad.A);
+        if (gamepad.A) {
+          this.scene.start("MainGame");
+        }
+      },
+      this /* Representa a scene (contexto) atual */
+    );
   }
 }
