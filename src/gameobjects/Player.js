@@ -18,7 +18,8 @@ export class Player extends Physics.Arcade.Sprite {
     this.sprite.body.setGravityY(600);
     this.sprite.setScale(1.2).refreshBody();
 
-    this.step = 300;
+    this.stepWalk = 300;
+    this.stepJump = 730;
 
     /* Inputs do teclado */
     this.cursors = scene.input.keyboard.createCursorKeys();
@@ -35,17 +36,15 @@ export class Player extends Physics.Arcade.Sprite {
       if (scene.input.gamepad.getPad(0).connected) {
         this.inputMobile.joyStick.setVisible(false);
         this.inputMobile.button.visible = false;
-        console.log("Falso conectado");
       }
     }
-    // this.inputMobile.button.on(
-    //   "pointerdown",
-    //   function () {
-    //     /* Realiza o jump do player quando se clica no botao virtual */
-    //     if (this.sprite.body.touching.down) this.sprite.setVelocityY(-730);
-    //   },
-    //   this
-    // );
+
+    /* Input Mouse/Touch. Resolve por ora o problema da desconexão
+    do gamepad. OBS: Phaser não desconecta o gamepad */
+    scene.input.once("pointerdown", () => {
+      this.inputMobile.joyStick.setVisible(true);
+      this.inputMobile.button.visible = true;
+    });
   }
 
   gamepadConnected(gamepad, event) {
@@ -70,13 +69,13 @@ export class Player extends Physics.Arcade.Sprite {
   move() {
     /* Movimentação Direita e Esquerda */
     if (this.cursors.left.isDown || this.inputMobile.cursors.left.isDown) {
-      this.sprite.setVelocityX(-this.step);
+      this.sprite.setVelocityX(-this.stepWalk);
       this.sprite.anims.play("left", true);
     } else if (
       this.cursors.right.isDown ||
       this.inputMobile.cursors.right.isDown
     ) {
-      this.sprite.setVelocityX(this.step);
+      this.sprite.setVelocityX(this.stepWalk);
       this.sprite.anims.play("right", true);
 
       /* Verifica se ha algum gamepad */
@@ -84,7 +83,7 @@ export class Player extends Physics.Arcade.Sprite {
       const pad = this.scene.input.gamepad.getPad(0);
 
       if (pad.A && this.sprite.body.touching.down) {
-        this.sprite.setVelocityY(-730);
+        this.sprite.setVelocityY(-this.stepJump);
       }
 
       if (pad.axes.length) {
@@ -92,10 +91,10 @@ export class Player extends Physics.Arcade.Sprite {
         // const axisV = pad.axes[1].getValue();
 
         if (axisH > 0.2) {
-          this.sprite.setVelocityX(this.step);
+          this.sprite.setVelocityX(this.stepWalk);
           this.sprite.anims.play("right", true);
         } else if (axisH < -0.2) {
-          this.sprite.setVelocityX(-this.step);
+          this.sprite.setVelocityX(-this.stepWalk);
           this.sprite.anims.play("left", true);
         } else {
           this.sprite.setVelocityX(0);
@@ -112,11 +111,11 @@ export class Player extends Physics.Arcade.Sprite {
       (this.cursors.up.isDown || this.inputMobile.getIsButtonDown()) &&
       this.sprite.body.touching.down
     ) {
-      this.sprite.setVelocityY(-730);
+      this.sprite.setVelocityY(-this.stepJump);
     }
 
     if (this.cursors.space.isDown && this.sprite.body.touching.down) {
-      this.sprite.setVelocityY(-730);
+      this.sprite.setVelocityY(-this.stepJump);
     }
   }
 }

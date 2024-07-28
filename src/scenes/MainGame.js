@@ -58,10 +58,9 @@ export class MainGame extends Scene {
   }
 
   update() {
-    console.log(this.input.gamepad.getPad(0));
-
     this.player.move();
 
+    /* Restarta as estrelas e  cria uma nova bomba */
     if (this.stars.isAllStarsWereCollected() === true) {
       this.stars.restartAllStars();
       this.bombs.createBomb(this.player.sprite.x);
