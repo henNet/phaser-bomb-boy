@@ -6,7 +6,7 @@ export class Stars extends Physics.Arcade.Image {
 
     this.group = scene.physics.add.group({
       key: "star",
-      repeat: 10,
+      repeat: 14,
       setXY: { x: 50, y: 0, stepX: 90 },
     });
 

@@ -13,11 +13,13 @@ export class MainGame extends Scene {
   init() {
     this.score = 0;
     this.isGameOver = false;
+    this.Player = null;
   }
 
   create() {
     /* Scenario */
-    this.add.image(512, 384, "background");
+    // this.add.image(512, 384, "background");
+    this.add.image(this.scale.width / 2, this.scale.height / 2, "background");
 
     /* Ground and Platforms */
     this.platforms = new Platforms(this);
@@ -56,6 +58,8 @@ export class MainGame extends Scene {
   }
 
   update() {
+    console.log(this.input.gamepad.getPad(0));
+
     this.player.move();
 
     if (this.stars.isAllStarsWereCollected() === true) {

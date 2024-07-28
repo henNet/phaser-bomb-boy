@@ -19,10 +19,15 @@ export class GameOver extends Scene {
   passed via scene.start()  */
   create() {
     /* Scenario */
-    this.add.image(512, 384, "background");
+    this.add.image(this.scale.width / 2, this.scale.height / 2, "background");
 
     const title = this.add
-      .text(512, 490, "Game Over", textStyleBig)
+      .text(
+        this.scale.width / 2,
+        this.scale.height / 2,
+        "Game Over",
+        textStyleBig
+      )
       .setOrigin(0.5)
       .setDepth(100);
 

@@ -8,11 +8,17 @@ export class Player extends Physics.Arcade.Sprite {
   constructor(scene) {
     super(scene, 100, 450, "player");
     this.scene = scene;
-    this.sprite = scene.physics.add.sprite(100, 450, "player");
+    this.sprite = scene.physics.add.sprite(
+      scene.scale.width / 2,
+      450,
+      "player"
+    );
     this.sprite.setBounce(0.2);
     this.sprite.setCollideWorldBounds(true);
     this.sprite.body.setGravityY(600);
     this.sprite.setScale(1.2).refreshBody();
+
+    this.step = 300;
 
     /* Inputs do teclado */
     this.cursors = scene.input.keyboard.createCursorKeys();
@@ -20,41 +26,57 @@ export class Player extends Physics.Arcade.Sprite {
     /* Inputs do Gamepad */
     scene.input.gamepad.on("connected", this.gamepadConnected, this);
     scene.input.gamepad.on("disconnected", this.gamepadDisconnected, this);
+    scene.input.gamepad.once("down", this.gamepadButtonDown, this);
 
     /* Inputs do Gamepad Vitual para Mobile */
     this.inputMobile = new MobileVirtualInput(scene);
-    this.inputMobile.button.on(
-      "pointerdown",
-      function () {
-        /* Realiza o jump do player quando se clica no botao virtual */
-        if (this.sprite.body.touching.down) this.sprite.setVelocityY(-730);
-      },
-      this
-    );
+    this.scene.input.gamepad.refreshPads();
+    if (this.scene.input.gamepad.total !== 0) {
+      if (scene.input.gamepad.getPad(0).connected) {
+        this.inputMobile.joyStick.setVisible(false);
+        this.inputMobile.button.visible = false;
+        console.log("Falso conectado");
+      }
+    }
+    // this.inputMobile.button.on(
+    //   "pointerdown",
+    //   function () {
+    //     /* Realiza o jump do player quando se clica no botao virtual */
+    //     if (this.sprite.body.touching.down) this.sprite.setVelocityY(-730);
+    //   },
+    //   this
+    // );
   }
 
   gamepadConnected(gamepad, event) {
     console.log("Gamepad connected");
-    this.inputMobile.joyStick.toggleVisible();
+    this.inputMobile.joyStick.setVisible(false);
     this.inputMobile.button.visible = false;
   }
 
   gamepadDisconnected(gamepad, event) {
     console.log("Gamepad Disconnected");
-    this.inputMobile.joyStick.toggleVisible();
+    // this.inputMobile.joyStick.toggleVisible();
+    this.inputMobile.joyStick.setVisible(true);
     this.inputMobile.button.visible = true;
+  }
+
+  gamepadButtonDown(gamepad, button, value) {
+    /* Desabilita o inputMobile */
+    this.inputMobile.joyStick.setVisible(false);
+    this.inputMobile.button.visible = false;
   }
 
   move() {
     /* Movimentação Direita e Esquerda */
     if (this.cursors.left.isDown || this.inputMobile.cursors.left.isDown) {
-      this.sprite.setVelocityX(-200);
+      this.sprite.setVelocityX(-this.step);
       this.sprite.anims.play("left", true);
     } else if (
       this.cursors.right.isDown ||
       this.inputMobile.cursors.right.isDown
     ) {
-      this.sprite.setVelocityX(200);
+      this.sprite.setVelocityX(this.step);
       this.sprite.anims.play("right", true);
 
       /* Verifica se ha algum gamepad */
@@ -62,18 +84,18 @@ export class Player extends Physics.Arcade.Sprite {
       const pad = this.scene.input.gamepad.getPad(0);
 
       if (pad.A && this.sprite.body.touching.down) {
-        this.sprite.setVelocityY(-630);
+        this.sprite.setVelocityY(-730);
       }
 
       if (pad.axes.length) {
         const axisH = pad.axes[0].getValue();
-        const axisV = pad.axes[1].getValue();
+        // const axisV = pad.axes[1].getValue();
 
         if (axisH > 0.2) {
-          this.sprite.setVelocityX(200);
+          this.sprite.setVelocityX(this.step);
           this.sprite.anims.play("right", true);
         } else if (axisH < -0.2) {
-          this.sprite.setVelocityX(-200);
+          this.sprite.setVelocityX(-this.step);
           this.sprite.anims.play("left", true);
         } else {
           this.sprite.setVelocityX(0);
@@ -86,7 +108,10 @@ export class Player extends Physics.Arcade.Sprite {
     }
 
     /* Movimentação do pulo */
-    if (this.cursors.up.isDown && this.sprite.body.touching.down) {
+    if (
+      (this.cursors.up.isDown || this.inputMobile.getIsButtonDown()) &&
+      this.sprite.body.touching.down
+    ) {
       this.sprite.setVelocityY(-730);
     }
 

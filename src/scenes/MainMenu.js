@@ -11,16 +11,26 @@ export class MainMenu extends Scene {
   after init() and preload(). Can be receive a data object 
   passed via scene.start()  */
   create() {
-    this.add.image(512, 384, "background");
+    this.add.image(this.scale.width / 2, this.scale.height / 2, "background");
     // const title = this.add.image(512, 350, "title").setDepth(100);
 
     const title = this.add
-      .text(512, 490, "Bomb Boy", textStyleBig)
+      .text(
+        this.scale.width / 2,
+        this.scale.height / 2,
+        "Bomb Boy",
+        textStyleBig
+      )
       .setOrigin(0.5)
       .setDepth(100);
 
     this.add
-      .text(512, 490, "Click to Play", textStyle)
+      .text(
+        this.scale.width / 2,
+        this.scale.height * 0.7,
+        "Click to Play",
+        textStyle
+      )
       .setOrigin(0.5)
       .setDepth(100);
 
@@ -40,7 +50,6 @@ export class MainMenu extends Scene {
     /* Input Keyboard */
     const enterKey = this.input.keyboard.addKey("ENTER");
     enterKey.on("down", () => {
-      console.log("Aqui");
       this.scene.start("MainGame");
     });
 
