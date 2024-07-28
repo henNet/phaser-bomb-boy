@@ -1,101 +1,81 @@
-# Phaser Vite Template
+# Jogo Bomb-Boy feito com Phaser 3, Template Vite e Javascript
 
-This is a Phaser 3 project template that uses Vite for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
+O jogo se baseia no tutorial fornecido pela Phaser e usa o template vite. O jogo possui mecânicas básicas e algumas outras inserirdas como forma de aprendizado. Link do tutorial base do jogo: https://phaser.io/tutorials/making-your-first-phaser-3-game-portuguese.
 
-**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-vite-ts)**
+## Design do Jogo (Cena principal)
 
-### Versions
+![screenshot](design.png)
 
-This template has been updated for:
+## Mecânicas e funcionalidades do Jogo
 
-- [Phaser 3.80.1](https://github.com/phaserjs/phaser)
-- [Vite 5.2.11](https://github.com/vitejs/vite)
+- [x] Personagem anda para os lados e pula
+- [x] Coleta de _stars_ e aumento pontos
+- [x] Bombas (inimigos) caem e matam o personagem se encostar
+- [x] Gameover se uma bomba encostar no personagem
+- [x] Jogabilidade pelo **Teclado**:
+  - [x] Setas direira e esqueda movem o personagem
+  - [x] Seta cima faz o personagem pular
+  - [x] Tecla _espaço_ faz o personagem pular
+  - [x] Tecla ENTER ou click do mouse muda de scene.
+- [x] Jogabilidade pelo **Gamepad**:
+  - [x] Axes Sticks movem o personagem para direita e esquerda
+  - [x] Botão X faz o personagem pular
+  - [x] Botão X muda de scene (simula click do mouse).
+- [x] Jogabilidade pelo **Touch (Mobile)**:
+  - [x] Axes virutal movem o personagem para direita e esquerda
+  - [x] Botão virtual faz o personagem pular
+  - [x] Botão virtual muda de scene (simula click do mouse)
+- [ ] Efeitos de Som
+  - [ ] Efeito de som quando o player coleta uma star
+  - [ ] Efeito de som quando o player toca em uma bomba
+  - [ ] Musica de background
 
-![screenshot](screenshot.png)
+## Criação do Projeto via _Template Phaser Game App_
 
-## Requirements
+Link para instalação do template: https://phaser.io/tutorials/create-game-app.
 
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
+### Criar um projeto básico
 
-## Available Commands
-
-| Command | Description |
-|---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm run dev` | Launch a development web server |
-| `npm run build` | Create a production build in the `dist` folder |
-
-## Writing Code
-
-After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm run dev`.
-
-The local development server runs on `http://localhost:8080` by default. Please see the Vite documentation if you wish to change this, or add SSL support.
-
-Once the server is running you can edit any of the files in the `src` folder. Vite will automatically recompile your code and then reload the browser.
-
-## Template Project Structure
-
-We have provided a default project structure to get you started. This is as follows:
-
-- `index.html` - A basic HTML page to contain the game.
-- `src` - Contains the game source code.
-- `src/main.js` - The main entry point. This contains the game configuration and starts the game.
-- `src/scenes/` - The Phaser Scenes are in this folder.
-- `public/style.css` - Some simple CSS rules to help with page layout.
-- `public/assets` - Contains the static assets used by the game.
-
-## Handling Assets
-
-Vite supports loading assets via JavaScript module `import` statements.
-
-This template provides support for both embedding assets and also loading them from a static folder. To embed an asset, you can import it at the top of the JavaScript file you are using it in:
-
-```js
-import logoImg from './assets/logo.png'
+```
+npm create @phaserjs/game@latest
 ```
 
-To load static files such as audio files, videos, etc place them into the `public/assets` folder. Then you can use this path in the Loader calls within Phaser:
+> [!NOTE] > **[Esse template também fornece uma versão com Typescript.](https://github.com/phaserjs/template-vite-ts)**
 
-```js
-preload ()
-{
-    //  This is an example of an imported bundled image.
-    //  Remember to import it at the top of this file
-    this.load.image('logo', logoImg);
+### Requisitos
 
-    //  This is an example of loading a static image
-    //  from the public/assets folder:
-    this.load.image('background', 'assets/bg.png');
-}
+[Node.js](https://nodejs.org) é necessário para instalar as dependências e executar os scripts via `npm`.
+
+### Comandos disponíveis no template
+
+| Comando         | Descrição                                                                               |
+| --------------- | --------------------------------------------------------------------------------------- |
+| `npm install`   | Instala as dependências do projeto                                                      |
+| `npm run dev`   | Executa a aplicação criando um servidor web local disponível em `http://localhost:8080` |
+| `npm run build` | Cria o build final em uma pasta chamada `dist`                                          |
+
+## Estrutura do Projeto
+
+O template cria um projeto padrão com a seguinte estrutura:
+
+- `index.html` - Um HTML básico que conterá o jogo.
+- `src` - Códigos fontes do jogo (scenes, componentes, ...)
+- `src/main.js` - Ponto de entrada do jogo. Contém o arquivo de configuração do jogo e a sua criação.
+- `src/scenes/` - Scenes do jogo.
+- `public/style.css` - CSS simples para o layout da página HTML.
+- `public/assets` - Contém os assets do jogo.
+- `dist` - Contém os arquivos finais do jogo após o comando de build. OBS: Essa pasta só é criado quando realiza-se o build (_npm run build_).
+
+## Pacotes ou Plugins utilizados
+
+Os seguintes pacotes foram utilizados:
+
+### Phaser 3 Rex Plugins
+
+Plugin utilizado para criar um gamepad virtual com axes para movimentação do personagem quando estiver executando em Mobile. Link da página guia para utilização do plugin: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/virtualjoystick/
+
+**Instalação**:
+
 ```
-
-When you issue the `npm run build` command, all static assets are automatically copied to the `dist/assets` folder.
-
-## Deploying to Production
-
-After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
-
-In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
-
-## Customizing the Template
-
-### Vite
-
-If you want to customize your build, such as adding plugin (i.e. for loading CSS or fonts), you can modify the `vite/config.*.mjs` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Vite documentation](https://vitejs.dev/) for more information.
-
-## Join the Phaser Community!
-
-We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
-
-**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
-**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
-**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
-**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
-**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
-**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
-
-Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
-
-The Phaser logo and characters are &copy; 2011 - 2024 Phaser Studio Inc.
-
-All rights reserved.
+npm i phaser3-rex-plugins
+```
